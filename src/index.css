@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Great+Vibes&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 96%;
+    --foreground: 100 15% 20%;
+    --card: 40 33% 96%;
+    --card-foreground: 100 15% 20%;
+    --popover: 40 33% 96%;
+    --popover-foreground: 100 15% 20%;
+    --primary: 90 30% 74%;
+    --primary-foreground: 100 15% 20%;
+    --secondary: 100 30% 43%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 90 20% 85%;
+    --muted-foreground: 100 10% 40%;
+    --accent: 42 50% 54%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 42 40% 70%;
+    --input: 90 20% 80%;
+    --ring: 42 50% 54%;
+    --radius: 0.75rem;
+
+    --pistachio: 90 30% 74%;
+    --pistachio-light: 90 30% 90%;
+    --sage: 100 30% 43%;
+    --cream: 36 56% 95%;
+    --gold: 42 50% 54%;
+    --gold-light: 42 50% 70%;
+    --ivory: 40 33% 96%;
+
+    --font-display: 'Cormorant Garamond', serif;
+    --font-subheading: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+    --font-decorative: 'Great Vibes', cursive;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+  h1, h2, h3 {
+    font-family: var(--font-subheading);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-subheading {
+    font-family: var(--font-subheading);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+  .font-decorative {
+    font-family: var(--font-decorative);
+  }
+}
+
+/* Falling petals */
+@keyframes fall {
+  0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.7; text-shadow: 0 0 10px hsl(var(--gold) / 0.3); }
+  50% { opacity: 1; text-shadow: 0 0 25px hsl(var(--gold) / 0.6); }
+}
+
+@keyframes soundbar {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+
+@keyframes eq {
+  0%, 100% { height: 4px; }
+  50% { height: 18px; }
+}
+
+@keyframes musicGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(201,168,76,0.4); }
+  50% { box-shadow: 0 0 20px rgba(201,168,76,0.9); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes drift {
+  0% { transform: translateY(-5vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes wreathSpin {
+  0% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+  100% { transform: rotate(-2deg); }
+}
+
+@keyframes textPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes tapBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 12px hsl(var(--pistachio) / 0.3); }
+  50% { box-shadow: 0 0 24px hsl(var(--pistachio) / 0.6); }
+}
+
+@keyframes flash {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes flip-in {
+  0% { transform: rotateX(90deg); opacity: 0; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-fall {
+  animation: fall linear forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-flip-in {
+  animation: flip-in 0.4s ease-out;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-drift {
+  animation: drift linear forwards;
+}
+
+.animate-wreath-spin {
+  animation: wreathSpin 4s ease-in-out infinite;
+}
+
+.animate-text-pulse {
+  animation: textPulse 2s ease-in-out infinite;
+}
+
+.animate-tap-bounce {
+  animation: tapBounce 1.5s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.animate-flash {
+  animation: flash 0.5s ease-out forwards;
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  opacity: 0;
+  animation: slideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: hsl(var(--cream)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--gold)); border-radius: 3px; }
+
+html { scroll-behavior: smooth; }
+
+
