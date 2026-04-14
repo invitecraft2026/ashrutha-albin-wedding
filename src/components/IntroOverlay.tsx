@@ -1,95 +1,130 @@
-import { useRef, useState } from "react";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import floralFrame from "/new-intro-image-1.png";
 
-interface IntroOverlayProps {
-  onEnter: () => void;
-}
+const PETAL_COUNT = 12;
 
-const IntroOverlay = ({ onEnter }: IntroOverlayProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [started, setStarted] = useState(false);
-  const [fading, setFading] = useState(false);
+const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
+  id: i,
+  left: Math.random() * 100,
+  delay: Math.random() * 6,
+  duration: 7 + Math.random() * 5,
+  size: 10 + Math.random() * 14,
+  rotation: Math.random() * 360,
+}));
 
-  const handleStart = () => {
-    if (started) return;
-    setStarted(true);
-    const video = videoRef.current;
-    if (!video) return;
-    video.playbackRate = 0.6;
-    video.play().catch(() => {});
-  };
-
-  const handleVideoEnd = () => {
-    setFading(true);
-    setTimeout(() => onEnter(), 400);
-  };
-
-  return (
-    <div
-      onClick={handleStart}
-      className="fixed inset-0 z-50 cursor-pointer overflow-hidden"
-    >
-      <div className="absolute inset-0" style={{ background: "#c5d8a4" }} />
-
-      <video
-        ref={videoRef}
-        src="/newintro.mp4"
-        playsInline
-        preload="auto"
-        muted // ← added
-        onEnded={handleVideoEnd}
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center",
-          background: "transparent",
-        }}
-      />
-
+const FloatingPetals = () => (
+  <div className="pointer-events-none fixed inset-0 overflow-hidden z-10">
+    {petals.map((p) => (
       <div
-        className="absolute inset-0 flex items-end justify-center pointer-events-none"
+        key={p.id}
+        className="absolute animate-petal-fall opacity-0"
         style={{
-          paddingBottom: "8vh",
-          opacity: started ? 0 : 1,
-          transition: "opacity 0.8s ease",
+          left: `${p.left}%`,
+          animationDelay: `${p.delay}s`,
+          animationDuration: `${p.duration}s`,
+          width: p.size,
+          height: p.size,
         }}
       >
-        <div style={{ display: "flex", gap: 8 }}>
-          {[0, 0.25, 0.5].map((delay, i) => (
-            <div
-              key={i}
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "rgba(74,103,65,0.6)",
-                animation: `dotBounce 1.4s ease-in-out ${delay}s infinite`,
-              }}
-            />
-          ))}
-        </div>
+        <div
+          className="w-full h-full rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse at 30% 30%, #f5e6e8, #f0d6d9)",
+            transform: `rotate(${p.rotation}deg) scaleX(0.6)`,
+          }}
+        />
       </div>
+    ))}
+  </div>
+);
 
+const GlowParticles = () => (
+  <div className="pointer-events-none fixed inset-0 z-0">
+    {Array.from({ length: 8 }, (_, i) => (
       <div
-        className="absolute inset-0 pointer-events-none"
+        key={i}
+        className="absolute rounded-full animate-glow-pulse"
         style={{
-          background: "#fff",
-          opacity: fading ? 1 : 0,
-          transition: fading ? "opacity 0.4s ease" : "none",
+          width: 4 + Math.random() * 6,
+          height: 4 + Math.random() * 6,
+          left: `${15 + Math.random() * 70}%`,
+          top: `${15 + Math.random() * 70}%`,
+          background:
+            "radial-gradient(circle, rgba(212,162,76,0.5), transparent)",
+          animationDelay: `${Math.random() * 3}s`,
         }}
       />
+    ))}
+  </div>
+);
 
-      <style>{`
-        @keyframes dotBounce {
-          0%, 100% { transform: translateY(0);   opacity: 0.3; }
-          50%       { transform: translateY(-6px); opacity: 1; }
-        }
-      `}</style>
-    </div>
+const IntroOverlay = ({ onEnter }: { onEnter: () => void }) => {
+  const [isExiting, setIsExiting] = useState(false);
+
+  const handleEnter = useCallback(() => {
+    if (isExiting) return;
+
+    setIsExiting(true);
+    setTimeout(onEnter, 1200);
+  }, [onEnter, isExiting]);
+
+  return (
+    <AnimatePresence>
+      {!isExiting && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden"
+          style={{
+            background:
+              "linear-gradient(180deg, #faf6f0 0%, #f6efe6 50%, #f3ebe0 100%)",
+          }}
+          onClick={handleEnter}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2 }}
+        >
+          <GlowParticles />
+          <FloatingPetals />
+
+          {/* 🌸 Center Content */}
+          <div className="relative z-20 flex flex-col items-center">
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5 }}
+            >
+              {/* Floral Frame */}
+              <img
+                src={floralFrame}
+                alt="Floral Frame"
+                className="w-[320px] sm:w-[420px] md:w-[480px] object-contain"
+              />
+
+              {/* Names */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <h1 className="text-[#D4A24C] text-3xl sm:text-4xl md:text-5xl font-serif">
+                  Ashrutha
+                </h1>
+
+                <p className="text-[#D4A24C] my-1">&</p>
+
+                <h1 className="text-[#D4A24C] text-3xl sm:text-4xl md:text-5xl font-serif">
+                  Albin
+                </h1>
+              </div>
+            </motion.div>
+
+            {/* Tap#E8941A */}
+            <p className="mt-8 text-sm tracking-[0.3em] text-[#D4A24C] uppercase">
+              Tap to Enter
+            </p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

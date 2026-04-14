@@ -322,3 +322,23 @@ html { scroll-behavior: smooth; }
   background-clip: text;
   animation: shimmer 2.5s infinite linear;
 }
+
+
+@keyframes petal-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+.animate-petal-fall {
+  animation: petal-fall linear infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
