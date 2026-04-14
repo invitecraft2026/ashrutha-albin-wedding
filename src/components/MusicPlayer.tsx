@@ -10,10 +10,8 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
   const [scrollY, setScrollY] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // 🔥 Smooth scroll tracking
   useEffect(() => {
     let ticking = false;
-
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
@@ -23,17 +21,13 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
         ticking = true;
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 🔊 Set initial volume + fade-in effect
   useEffect(() => {
     if (!audioRef.current) return;
-
-    audioRef.current.volume = 0.25; // start from 0
-
+    audioRef.current.volume = 0.25;
     let vol = 0;
     const fade = setInterval(() => {
       if (audioRef.current && vol < 0.3) {
@@ -43,7 +37,6 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
         clearInterval(fade);
       }
     }, 100);
-
     return () => clearInterval(fade);
   }, []);
 
@@ -57,7 +50,6 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
 
   const toggle = () => {
     if (!audioRef.current) return;
-
     if (playing) {
       audioRef.current.pause();
       setPlaying(false);
@@ -69,14 +61,24 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
     }
   };
 
-  // 🔥 Floating animation
   const floatY = Math.sin(scrollY * 0.006) * 20;
   const floatX = Math.cos(scrollY * 0.004) * 8;
 
   return (
     <>
-      {/* 🎵 Add your music file here */}
       <audio ref={audioRef} loop preload="auto" src="/Niyum njanum.mpeg" />
+
+      {/* Keyframes injected once */}
+      <style>{`
+        @keyframes eq {
+          0%, 100% { height: 4px; }
+          50% { height: 18px; }
+        }
+        @keyframes diya-pulse {
+          0%, 100% { box-shadow: 0 0 14px 4px rgba(232,148,26,0.45), 0 4px 20px rgba(139,26,26,0.30); }
+          50%       { box-shadow: 0 0 28px 8px rgba(232,148,26,0.65), 0 6px 28px rgba(139,26,26,0.40); }
+        }
+      `}</style>
 
       <div
         className="fixed z-[9999] flex items-center"
@@ -88,26 +90,30 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
       >
         {/* Tooltip */}
         <div
-          className="mr-3 px-3 py-1 rounded-full text-xs whitespace-nowrap relative"
+          className="mr-3 px-3 py-1.5 rounded-full text-xs whitespace-nowrap relative font-sans"
           style={{
-            background: "hsl(var(--sage))",
-            color: "hsl(var(--cream))",
+            background: "#8B1A1A",                       /* crimson */
+            color: "#F5E6C8",                            /* ivory */
+            border: "1px solid rgba(212,162,76,0.40)",  /* gold border */
+            boxShadow: "0 4px 16px rgba(139,26,26,0.25)",
             opacity: hovered ? 1 : 0,
             transform: hovered ? "translateX(0)" : "translateX(8px)",
             transition: "opacity 0.2s, transform 0.2s",
             pointerEvents: "none",
+            letterSpacing: "0.05em",
           }}
         >
           {playing ? "Pause Music" : "Play Music"}
+          {/* Arrow tip — crimson */}
           <span
-            className="absolute top-1/2 -right-1.5"
+            className="absolute top-1/2 -right-[6px]"
             style={{
               transform: "translateY(-50%)",
               width: 0,
               height: 0,
               borderTop: "5px solid transparent",
               borderBottom: "5px solid transparent",
-              borderLeft: "6px solid hsl(var(--sage))",
+              borderLeft: "6px solid #8B1A1A",
             }}
           />
         </div>
@@ -117,24 +123,28 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
           onClick={toggle}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          className="w-[52px] h-[52px] rounded-full flex items-center justify-center border-2 cursor-pointer hover:scale-105 shrink-0"
+          className="w-[54px] h-[54px] rounded-full flex items-center justify-center cursor-pointer hover:scale-105 shrink-0"
           style={{
-            background: "hsl(var(--pistachio))",
-            borderColor: "hsl(var(--gold))",
+            /* Ivory-warm base, matches the card surfaces */
+            background: "linear-gradient(145deg, #F5E6C8 0%, #FBF5EC 100%)",
+            border: "1px solid rgba(212,162,76,0.55)",
             transition: "transform 0.3s, box-shadow 0.3s",
+            /* Diya glow when playing, gentle gold when paused */
+            animation: playing ? "diya-pulse 1.8s ease-in-out infinite" : "none",
             boxShadow: playing
-              ? "0 0 20px rgba(201,168,76,0.7)"
-              : "0 4px 20px rgba(107,143,78,0.4)",
+              ? "0 0 20px 6px rgba(232,148,26,0.50), 0 4px 20px rgba(139,26,26,0.25)"
+              : "0 4px 20px rgba(160,116,42,0.25)",
           }}
         >
           {playing ? (
+            /* Equaliser bars — crimson */
             <div className="flex items-end gap-[3px] h-5">
               {[0, 0.15, 0.3, 0.45].map((delay, i) => (
                 <span
                   key={i}
                   className="w-[3px] rounded-sm"
                   style={{
-                    background: "hsl(var(--sage))",
+                    background: "#8B1A1A",
                     animation: `eq 0.8s ease-in-out ${delay}s infinite`,
                     height: "4px",
                   }}
@@ -142,13 +152,12 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
               ))}
             </div>
           ) : (
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="hsl(var(--sage))"
-            >
-              <path d="M9 18V5l12-2v13M9 18c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM21 16c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z" />
+            /* Music note icon — crimson */
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 18V5l12-2v13M9 18c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM21 16c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"
+                fill="#8B1A1A"
+              />
             </svg>
           )}
         </button>
