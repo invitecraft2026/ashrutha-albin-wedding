@@ -22,7 +22,7 @@ const VideoHero = () => {
         playsInline
         className="absolute inset-0 w-full h-full object-cover brightness-[0.55] saturate-[1.15]"
       >
-        <source src="/wedding-animated-video.mp4" type="video/mp4" />
+        <source src="/wedding-animated-hindu-video.mp4" type="video/mp4" />
       </video>
 
       {/* 🌫 Overlay */}
@@ -31,7 +31,7 @@ const VideoHero = () => {
       <CornerFlorals />
 
       <div className="relative z-10 text-center px-6">
-        
+
         {/* Subtitle */}
         <p
           className="animate-slide-up text-cream/85 mb-6 uppercase"
@@ -58,17 +58,6 @@ const VideoHero = () => {
             animationDelay: "0.5s",
           }}
         >
-          Engagement <br />
-          <span
-            style={{
-              fontSize: "0.6em",
-              color: "#C9A84C",
-              letterSpacing: "0.2em",
-            }}
-          >
-            — & —
-          </span>
-          <br />
           Wedding
         </h2>
 
@@ -93,7 +82,7 @@ const VideoHero = () => {
               textShadow: "0 4px 15px rgba(0,0,0,0.35)",
             }}
           >
-            Neethu
+            Albin
           </span>
 
           <span
@@ -114,7 +103,7 @@ const VideoHero = () => {
               textShadow: "0 4px 15px rgba(0,0,0,0.35)",
             }}
           >
-            Allan
+            Ashrutha
           </span>
         </div>
       </div>

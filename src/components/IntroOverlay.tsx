@@ -32,7 +32,7 @@ const IntroOverlay = ({ onEnter }: IntroOverlayProps) => {
 
       <video
         ref={videoRef}
-        src="/introvideo2.mp4"
+        src="/newintro.mp4"
         playsInline
         preload="auto"
         muted // ← added

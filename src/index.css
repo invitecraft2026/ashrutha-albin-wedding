@@ -215,4 +215,110 @@
 
 html { scroll-behavior: smooth; }
 
+/* ─── Paste this inside your :root block in globals.css ─────────────────── */
 
+:root {
+  /* Shadcn base */
+  --background: 40 71% 96%;          /* ivory */
+  --foreground: 0 69% 18%;           /* deep crimson text */
+
+  --card: 40 68% 98%;
+  --card-foreground: 0 69% 18%;
+
+  --popover: 40 68% 98%;
+  --popover-foreground: 0 69% 18%;
+
+  --primary: 0 69% 32%;              /* crimson */
+  --primary-foreground: 40 71% 96%; /* ivory */
+
+  --secondary: 38 62% 57%;           /* gold */
+  --secondary-foreground: 0 69% 18%;
+
+  --muted: 40 40% 92%;
+  --muted-foreground: 158 25% 38%;   /* forest light */
+
+  --accent: 36 83% 50%;              /* diya amber */
+  --accent-foreground: 0 69% 18%;
+
+  --destructive: 5 62% 47%;
+  --destructive-foreground: 40 71% 96%;
+
+  --border: 38 40% 82%;
+  --input: 38 40% 88%;
+  --ring: 38 62% 57%;                /* gold ring */
+
+  --radius: 0.75rem;
+
+  /* ─── Wedding Colors ─────────────────────────────────── */
+
+  /* Crimson — lehenga red */
+  --crimson: 0 69% 32%;
+  --crimson-light: 5 62% 47%;
+  --crimson-dark: 0 70% 21%;
+
+  /* Gold — marigold garlands */
+  --gold: 38 62% 57%;
+  --gold-light: 40 84% 71%;
+  --gold-dark: 37 59% 39%;
+
+  /* Ivory — sherwani / surfaces */
+  --ivory: 40 71% 96%;
+  --ivory-warm: 40 68% 88%;
+
+  /* Terracotta — marigold orange */
+  --terracotta: 22 57% 52%;
+  --terracotta-light: 25 78% 79%;
+
+  /* Forest — foliage green */
+  --forest: 158 25% 23%;
+  --forest-light: 158 25% 38%;
+
+  /* Blush — soft pink petals */
+  --blush: 344 57% 77%;
+  --blush-light: 344 63% 91%;
+
+  /* Diya — warm amber flame */
+  --diya: 36 83% 50%;
+  --diya-glow: 44 95% 83%;
+}
+
+.dark {
+  --background: 0 70% 8%;
+  --foreground: 40 71% 92%;
+
+  --card: 0 50% 12%;
+  --card-foreground: 40 71% 92%;
+
+  --primary: 5 62% 55%;
+  --primary-foreground: 40 71% 96%;
+
+  --secondary: 38 50% 40%;
+  --secondary-foreground: 40 71% 92%;
+
+  --muted: 0 30% 18%;
+  --muted-foreground: 40 40% 65%;
+
+  --accent: 36 75% 45%;
+  --accent-foreground: 40 71% 96%;
+
+  --border: 0 30% 22%;
+  --input: 0 30% 20%;
+  --ring: 38 62% 50%;
+}
+
+/* ─── Utility: Gold shimmer text (for headings) ──────────────────────────── */
+.text-gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #A0742A 0%,
+    #D4A24C 30%,
+    #F2C97A 50%,
+    #D4A24C 70%,
+    #A0742A 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 2.5s infinite linear;
+}
