@@ -22,7 +22,7 @@ const VideoHero = () => {
         playsInline
         className="absolute inset-0 w-full h-full object-cover brightness-[0.55] saturate-[1.15]"
       >
-        <source src="/wedding-animated-hindu-video.mp4" type="video/mp4" />
+        <source src="/wedding-animated-hindu-video-2.mp4" type="video/mp4" />
       </video>
 
       {/* 🌫 Overlay */}
@@ -82,18 +82,20 @@ const VideoHero = () => {
               textShadow: "0 4px 15px rgba(0,0,0,0.35)",
             }}
           >
-            Albin
+            Ashrutha
+           
           </span>
 
-          <span
-            className="animate-float"
-            style={{
-              color: "#C9A84C",
-              fontSize: "1.6rem",
-            }}
-          >
-            ✦
-          </span>
+         <span
+  className="animate-float"
+  style={{
+    color: "#D4A24C", // richer gold
+    fontSize: "1.8rem",
+    filter: "drop-shadow(0 0 6px rgba(212,162,76,0.5))",
+  }}
+>
+  ❤
+</span>
 
           <span
             style={{
@@ -103,7 +105,7 @@ const VideoHero = () => {
               textShadow: "0 4px 15px rgba(0,0,0,0.35)",
             }}
           >
-            Ashrutha
+             Albin
           </span>
         </div>
       </div>

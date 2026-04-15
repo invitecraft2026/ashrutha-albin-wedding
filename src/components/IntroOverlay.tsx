@@ -1,130 +1,206 @@
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import floralFrame from "/new-intro-image-1.png";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import floralTop from "/flower-top.png";
+import floralBottom from "/flower-bottom.png";
 
-const PETAL_COUNT = 12;
+interface WeddingIntroProps {
+  groomName?: string;
+  brideName?: string;
+  onEnter: () => void;
+}
 
-const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
-  id: i,
-  left: Math.random() * 100,
-  delay: Math.random() * 6,
-  duration: 7 + Math.random() * 5,
-  size: 10 + Math.random() * 14,
-  rotation: Math.random() * 360,
-}));
-
-const FloatingPetals = () => (
-  <div className="pointer-events-none fixed inset-0 overflow-hidden z-10">
-    {petals.map((p) => (
-      <div
-        key={p.id}
-        className="absolute animate-petal-fall opacity-0"
-        style={{
-          left: `${p.left}%`,
-          animationDelay: `${p.delay}s`,
-          animationDuration: `${p.duration}s`,
-          width: p.size,
-          height: p.size,
-        }}
-      >
-        <div
-          className="w-full h-full rounded-full"
-          style={{
-            background:
-              "radial-gradient(ellipse at 30% 30%, #f5e6e8, #f0d6d9)",
-            transform: `rotate(${p.rotation}deg) scaleX(0.6)`,
-          }}
-        />
-      </div>
-    ))}
-  </div>
-);
-
-const GlowParticles = () => (
-  <div className="pointer-events-none fixed inset-0 z-0">
-    {Array.from({ length: 8 }, (_, i) => (
-      <div
-        key={i}
-        className="absolute rounded-full animate-glow-pulse"
-        style={{
-          width: 4 + Math.random() * 6,
-          height: 4 + Math.random() * 6,
-          left: `${15 + Math.random() * 70}%`,
-          top: `${15 + Math.random() * 70}%`,
-          background:
-            "radial-gradient(circle, rgba(212,162,76,0.5), transparent)",
-          animationDelay: `${Math.random() * 3}s`,
-        }}
-      />
-    ))}
-  </div>
-);
-
-const IntroOverlay = ({ onEnter }: { onEnter: () => void }) => {
-  const [isExiting, setIsExiting] = useState(false);
-
-  const handleEnter = useCallback(() => {
-    if (isExiting) return;
-
-    setIsExiting(true);
-    setTimeout(onEnter, 1200);
-  }, [onEnter, isExiting]);
+const Petal = ({ delay }: { delay: number }) => {
+  const left = Math.random() * 100;
+  const duration = 6 + Math.random() * 6;
+  const size = 10 + Math.random() * 8;
+  const symbols = ["✿", "❀", "✾", "🌸"];
+  const symbol = symbols[Math.floor(Math.random() * symbols.length)];
 
   return (
-    <AnimatePresence>
-      {!isExiting && (
+    <motion.span
+      className="absolute top-0 pointer-events-none select-none"
+      style={{ left: `${left}%`, fontSize: size }}
+      initial={{ y: -20, opacity: 0, rotate: 0 }}
+      animate={{
+        y: typeof window !== "undefined" ? window.innerHeight + 50 : 700,
+        opacity: [0, 0.6, 0.5, 0],
+        rotate: 720,
+      }}
+      transition={{
+        duration,
+        delay,
+        ease: "linear",
+        repeat: Infinity,
+        repeatDelay: Math.random() * 4,
+      }}
+    >
+      {symbol}
+    </motion.span>
+  );
+};
+
+const Sparkle = ({ top, left, delay }: { top: string; left: string; delay: number }) => (
+  <motion.div
+    className="absolute pointer-events-none w-1.5 h-1.5 sm:w-2 sm:h-2"
+    style={{ top, left }}
+    animate={{ scale: [0, 1, 0], rotate: [0, 180, 360], opacity: [0, 1, 0] }}
+    transition={{ duration: 3, delay, repeat: Infinity, ease: "easeInOut" }}
+  >
+    <span
+      className="absolute inset-0"
+      style={{
+        background: "#c9a882",
+        clipPath:
+          "polygon(50% 0%, 52% 48%, 100% 50%, 52% 52%, 50% 100%, 48% 52%, 0% 50%, 48% 48%)",
+      }}
+    />
+  </motion.div>
+);
+
+const IntroOverlay = ({
+  groomName = "Ashrutha",
+  brideName = "Albin",
+  onEnter,
+}: WeddingIntroProps) => {
+  const [petals] = useState(() => Array.from({ length: 12 }, (_, i) => i));
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-40 flex items-center justify-center overflow-hidden px-4"
+      style={{ background: "hsl(var(--background))", cursor: "pointer" }}
+      exit={{ opacity: 0, scale: 1.06 }}
+      transition={{ duration: 0.8, ease: [0.4, 0, 1, 1] }}
+      onClick={onEnter}
+    >
+      {/* Petals */}
+      {petals.map((i) => (
+        <Petal key={i} delay={i * 0.5} />
+      ))}
+
+      {/* Sparkles */}
+      <Sparkle top="22%" left="18%" delay={0} />
+      <Sparkle top="35%" left="78%" delay={0.8} />
+      <Sparkle top="65%" left="26%" delay={1.6} />
+      <Sparkle top="70%" left="82%" delay={2.1} />
+      <Sparkle top="15%" left="68%" delay={0.4} />
+
+      {/* Pulse Rings */}
+      {[180, 240].map((size, i) => (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden"
+          key={size}
+          className="absolute rounded-full pointer-events-none"
           style={{
-            background:
-              "linear-gradient(180deg, #faf6f0 0%, #f6efe6 50%, #f3ebe0 100%)",
+            width: size,
+            height: size,
+            border: "0.5px solid rgba(201,168,130,0.2)",
+            top: "50%",
+            left: "50%",
+            marginTop: -size / 2,
+            marginLeft: -size / 2,
           }}
-          onClick={handleEnter}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.2 }}
+          animate={{ scale: [0.95, 1.05, 0.95], opacity: [0.7, 1, 0.7] }}
+          transition={{
+            duration: 4,
+            delay: i * 0.6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Floral Images */}
+      <motion.img
+        src={floralTop}
+        alt=""
+        className="absolute top-0 left-0 w-32 sm:w-48 md:w-80 pointer-events-none"
+        initial={{ opacity: 0, scale: 0.85, x: -20, y: -20 }}
+        animate={{ opacity: 0.85, scale: [1, 1.02, 1], x: 0, y: 0 }}
+        transition={{
+          opacity: { duration: 1.8 },
+          x: { duration: 1.5 },
+          y: { duration: 1.5 },
+          scale: { duration: 7, repeat: Infinity },
+        }}
+      />
+
+      <motion.img
+        src={floralBottom}
+        alt=""
+        className="absolute bottom-2 right-2 w-32 sm:w-48 md:w-80 pointer-events-none"
+        initial={{ opacity: 0, scale: 0.85, x: 20, y: 20 }}
+        animate={{ opacity: 0.85, scale: [1, 1.02, 1], x: 0, y: 0 }}
+        transition={{
+          opacity: { duration: 1.8, delay: 0.3 },
+          x: { duration: 1.5, delay: 0.3 },
+          y: { duration: 1.5, delay: 0.3 },
+          scale: { duration: 8, repeat: Infinity },
+        }}
+      />
+
+      {/* Center Content */}
+      <motion.div
+        className="relative z-20 text-center max-w-xs sm:max-w-md"
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 5, repeat: Infinity }}
+      >
+        {/* Eyebrow */}
+        <motion.p
+          className="text-[9px] sm:text-[10px] tracking-[0.4em] uppercase mb-6 sm:mb-8"
+          style={{ color: "#9b8c7e", fontFamily: "'Jost', sans-serif" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <GlowParticles />
-          <FloatingPetals />
+          Together with their families
+        </motion.p>
 
-          {/* 🌸 Center Content */}
-          <div className="relative z-20 flex flex-col items-center">
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.5 }}
-            >
-              {/* Floral Frame */}
-              <img
-                src={floralFrame}
-                alt="Floral Frame"
-                className="w-[320px] sm:w-[420px] md:w-[480px] object-contain"
-              />
+        {/* Groom */}
+        <motion.h1
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            fontStyle: "italic",
+            fontSize: "clamp(2.5rem, 10vw, 5rem)",
+            color: "#3d2c20",
+          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          {groomName}
+        </motion.h1>
 
-              {/* Names */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <h1 className="text-[#D4A24C] text-3xl sm:text-4xl md:text-5xl font-serif">
-                  Ashrutha
-                </h1>
+        {/* Divider */}
+        <div className="flex items-center justify-center gap-2 sm:gap-3 my-3">
+          <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[#c9a882] to-transparent" />
+          <div className="w-[4px] h-[4px] sm:w-[5px] sm:h-[5px] bg-[#c9a882] rotate-45" />
+          <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[#c9a882] to-transparent" />
+        </div>
 
-                <p className="text-[#D4A24C] my-1">&</p>
+        {/* Bride */}
+        <motion.h1
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            fontStyle: "italic",
+            fontSize: "clamp(2.5rem, 10vw, 5rem)",
+            color: "#3d2c20",
+          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          {brideName}
+        </motion.h1>
 
-                <h1 className="text-[#D4A24C] text-3xl sm:text-4xl md:text-5xl font-serif">
-                  Albin
-                </h1>
-              </div>
-            </motion.div>
-
-            {/* Tap#E8941A */}
-            <p className="mt-8 text-sm tracking-[0.3em] text-[#D4A24C] uppercase">
-              Tap to Enter
-            </p>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        {/* Tap Text */}
+        <motion.p
+          className="mt-8 sm:mt-10 text-[8px] sm:text-[9.5px] tracking-[0.4em] uppercase"
+          style={{ color: "#c9a882", fontFamily: "'Jost', sans-serif" }}
+          animate={{ opacity: [0.35, 0.75, 0.35] }}
+          transition={{ duration: 2.5, repeat: Infinity }}
+        >
+          Tap anywhere to open
+        </motion.p>
+      </motion.div>
+    </motion.div>
   );
 };
 
