@@ -66,7 +66,7 @@ const MusicPlayer = forwardRef<MusicPlayerHandle>((_, ref) => {
 
   return (
     <>
-      <audio ref={audioRef} loop preload="auto" src="/Niyum njanum.mpeg" />
+      <audio ref={audioRef} loop preload="auto" src="/seetha-kaliyana.mpeg" />
 
       {/* Keyframes injected once */}
       <style>{`
