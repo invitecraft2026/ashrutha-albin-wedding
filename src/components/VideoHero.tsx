@@ -22,7 +22,7 @@ const VideoHero = () => {
         playsInline
         className="absolute inset-0 w-full h-full object-cover brightness-[0.55] saturate-[1.15]"
       >
-        <source src="/wedding-animated-hindu-video-2.mp4" type="video/mp4" />
+        <source src="/wedding-animated-hindu-video-3.mp4" type="video/mp4" />
       </video>
 
       {/* 🌫 Overlay */}
